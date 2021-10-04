@@ -38,12 +38,6 @@ def centroids(points, k):
     return [x_c, y_c]
 
 
-def calculate_relation(points, centroids, k, m):
-    for point in points:
-        for i in range(k):
-            point[f'cluster_{i}'] = di
-
-
 def new_centroinds(points, k):
     result = [[], []]
     for i in range(k):

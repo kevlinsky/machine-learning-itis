@@ -136,4 +136,8 @@ if __name__ == '__main__':
     if not brk:
         print(f'The loop has reached the maximum number of iterations = {max_iters}')
 
-    print(points.head(20))
+    columns = ['x', 'y']
+    for i in range(k):
+        columns.append(f'cluster_1_{i}')
+
+    print(points.head(20)[columns])
