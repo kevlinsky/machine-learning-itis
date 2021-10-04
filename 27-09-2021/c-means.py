@@ -66,6 +66,20 @@ def calculate_relations(points, centrs, k, m):
         points[f'cluster_1_{i}'] = us[i]
 
 
+def relate_to_cluster(points, k):
+    clusters = []
+    for index, point in points.iterrows():
+        max = -1
+        c = 0
+        for i in range(k):
+            if max < point[f'cluster_1_{i}']:
+                c = i
+                max = point[f'cluster_1_{i}']
+        clusters.append(c)
+
+    points['cluster'] = clusters
+
+
 def difference(points, k, e):
     difference_count = []
     for i in range(k):
@@ -108,6 +122,22 @@ def fit_relations(points, k):
         points[f'cluster_0_{i}'] = points[f'cluster_0_{i}'] / summary
 
 
+def print_graph(points, centroids, k):
+    colors = cm.rainbow(np.linspace(0, 1, k))
+    # colors = {
+    #     0: 'green',
+    #     1: 'blue',
+    #     2: 'yellow',
+    #     3: 'purple',
+    #     4: 'brown',
+    #
+    # }
+    plt.scatter(centroids[0], centroids[1], color='black')
+    for i in range(k):
+        plt.scatter(points[points.cluster == i]['x'], points[points.cluster == i]['y'], color=colors[i])
+    plt.show()
+
+
 if __name__ == '__main__':
     n = 100
     k = 3
@@ -125,7 +155,9 @@ if __name__ == '__main__':
     for i in range(max_iters):
         centrs = centroids(points, k, m)
         calculate_relations(points, centrs, k, m)
+        relate_to_cluster(points, k)
         difference_count = difference(points, k, e)
+        print_graph(points, centrs, k)
         if difference_count == 0:
             print(f'Count of iterations = {i + 1}')
             brk = True
@@ -136,7 +168,7 @@ if __name__ == '__main__':
     if not brk:
         print(f'The loop has reached the maximum number of iterations = {max_iters}')
 
-    columns = ['x', 'y']
+    columns = ['x', 'y', 'cluster']
     for i in range(k):
         columns.append(f'cluster_1_{i}')
 
