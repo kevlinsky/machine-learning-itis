@@ -43,28 +43,27 @@ def centroids(points, k, m):
 
 
 def calculate_relations(points, centrs, k, m):
+    distances = []
+
     power = 2 / (1 - m)
 
-    sums = []
-    for i in range(k):
-        sums.append([])
-
     for index, point in points.iterrows():
-        distances = []
+        distances.append([])
         for i in range(k):
-            distances.append(dist(point['x'], point['y'], centrs[0][i], centrs[1][i]))
+            d = dist(point['x'], point['y'], centrs[0][i], centrs[1][i])
+            distances[index].append(pow(d, power))
 
-        for i in range(k):
-            sum = 0
-            for j in range(k):
-                if distances[j] != 0.0:
-                    sum += pow(distances[i] / distances[j], power)
-                else:
-                    sum += 0
-            sums[i].append(sum)
+    us = []
+    for i in range(k):
+        us.append([])
+
+    for i in range(len(points['x'])):
+        for j in range(k):
+            res = distances[i][j] / sum(distances[i])
+            us[j].append(res)
 
     for i in range(k):
-        points[f'cluster_1_{i}'] = sums[i]
+        points[f'cluster_1_{i}'] = us[i]
 
 
 def difference(points, k, e):
@@ -124,17 +123,17 @@ if __name__ == '__main__':
 
     brk = False
     for i in range(max_iters):
-        print(points.head(10))
         centrs = centroids(points, k, m)
         calculate_relations(points, centrs, k, m)
         difference_count = difference(points, k, e)
-        replace(points, k)
         if difference_count == 0:
-            print(f'Count of iterations = {i}')
+            print(f'Count of iterations = {i + 1}')
             brk = True
             break
+        else:
+            replace(points, k)
 
     if not brk:
         print(f'The loop has reached the maximum number of iterations = {max_iters}')
 
-    # print(points.head(20))
+    print(points.head(20))
