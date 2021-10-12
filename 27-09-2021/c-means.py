@@ -140,7 +140,7 @@ def print_graph(points, centroids, k):
 
 if __name__ == '__main__':
     n = 100
-    k = 3
+    k = 4
     m = 1.5
     e = 0.001
     max_iters = 100
