@@ -1,6 +1,7 @@
 from enum import Enum
 import pygame
 import numpy as np
+from matplotlib import cm
 
 pygame.init()
 screen = pygame.display.set_mode((700, 500))
@@ -18,11 +19,11 @@ points_count = 0
 
 
 class Color(Enum):
-    BLACK = (0, 0, 0)
-    RED = (255, 0, 0)
-    GREEN = (0, 255, 0)
-    YELLOW = (255, 255, 0)
-    WHITE = (255, 255, 255)
+    BLACK = 'black'
+    RED = 'red'
+    GREEN = 'green'
+    YELLOW = 'yellow'
+    WHITE = 'white'
 
 
 class Point:
@@ -130,6 +131,19 @@ def clusterize():
         centre.append(max_centre_dist + 5)
         centres.append(centre)
 
+    # colors = cm.rainbow(np.linspace(0, 1, len(groups)))
+    colors = {
+        0: 'purple',
+        1: 'brown',
+        2: 'violet',
+        3: 'green',
+        4: 'blue',
+
+    }
+    for idx, group in enumerate(groups):
+        for point in group:
+            point.color = colors[idx]
+
     print('Done!')
 
 
@@ -153,8 +167,8 @@ while not exit:
         for point in singles:
             point.draw(screen)
 
-        for point in points:
-            point.draw(screen)
+        # for point in points:
+        #     point.draw(screen)
 
     pygame.display.update()
 
