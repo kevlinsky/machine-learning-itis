@@ -1,7 +1,5 @@
 import pygame
 import numpy as np
-from matplotlib import cm
-from matplotlib import colors as clrs
 from collections import Counter
 
 pygame.init()
